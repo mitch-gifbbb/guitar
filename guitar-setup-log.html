@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Bench Book — Guitar Setup Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1612;
+    --ink-soft: #453d33;
+    --ink-faint: #8a7e6e;
+    --paper: #f4ede0;
+    --paper-warm: #ebe2d1;
+    --paper-shadow: #d8cdb6;
+    --rule: #a89a7f;
+    --accent: #8b2e1f;
+    --accent-soft: #c46a5a;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --serif: 'Fraunces', Georgia, serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at top, rgba(255,255,255,0.3), transparent 60%),
+      repeating-linear-gradient(
+        transparent,
+        transparent 32px,
+        rgba(168, 154, 127, 0.08) 32px,
+        rgba(168, 154, 127, 0.08) 33px
+      ),
+      var(--paper);
+    padding: 40px 24px 80px;
+  }
+
+  /* paper texture overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(139, 46, 31, 0.03) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(139, 126, 94, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 28px;
+    margin-bottom: 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 32px;
+  }
+
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .brand-kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .brand-title {
+    font-family: var(--serif);
+    font-size: clamp(42px, 6vw, 68px);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .brand-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .brand-sub {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-align: right;
+    color: var(--ink-faint);
+    line-height: 1.7;
+    letter-spacing: 0.05em;
+  }
+
+  .meta strong { color: var(--ink); font-weight: 700; }
+
+  /* ─── LAYOUT ─── */
+  .layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media (max-width: 820px) {
+    .layout { grid-template-columns: 1fr; gap: 32px; }
+    header { grid-template-columns: 1fr; }
+    .meta { text-align: left; }
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    position: sticky;
+    top: 24px;
+  }
+
+  .sidebar-heading {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .guitar-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 24px;
+  }
+
+  .guitar-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.15s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .guitar-item:hover {
+    background: var(--paper-warm);
+    border-left-color: var(--accent-soft);
+  }
+
+  .guitar-item.active {
+    background: var(--paper-warm);
+    border-left-color: var(--accent);
+  }
+
+  .guitar-item-name {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .guitar-item-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+  }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border: 1px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .btn-ghost {
+    border: none;
+    padding: 8px 12px;
+    color: var(--ink-soft);
+  }
+
+  .btn-ghost:hover {
+    background: var(--paper-warm);
+    color: var(--ink);
+  }
+
+  .btn-danger {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .btn-danger:hover {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  .btn-full {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ─── MAIN ─── */
+  main {
+    min-height: 400px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--ink-faint);
+    border: 1px dashed var(--rule);
+  }
+
+  .empty-state h2 {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+
+  .empty-state p {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    margin-bottom: 28px;
+  }
+
+  /* ─── GUITAR VIEW ─── */
+  .guitar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 32px;
+  }
+
+  .guitar-title {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 144;
+  }
+
+  .guitar-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-top: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .guitar-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ─── ENTRIES ─── */
+  .entry {
+    border-top: 1px solid var(--rule);
+    padding: 28px 0;
+    position: relative;
+  }
+
+  .entry:first-of-type { border-top: none; padding-top: 0; }
+
+  .entry-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 18px;
+    gap: 16px;
+  }
+
+  .entry-date {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .entry-summary {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-soft);
+    flex: 1;
+    text-align: right;
+  }
+
+  .entry-delete {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    background: none;
+    border: none;
+    color: var(--ink-faint);
+    cursor: pointer;
+    padding: 4px 6px;
+  }
+
+  .entry-delete:hover { color: var(--accent); }
+
+  .entry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px 40px;
+  }
+
+  .entry-section h4 {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--paper-shadow);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+  }
+
+  .entry-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 4px 0;
+    font-size: 14px;
+    align-items: baseline;
+  }
+
+  .entry-label {
+    font-family: var(--serif);
+    color: var(--ink-soft);
+  }
+
+  .entry-value {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 500;
+    text-align: right;
+  }
+
+  .entry-notes {
+    margin-top: 20px;
+    padding: 16px 20px;
+    background: var(--paper-warm);
+    border-left: 3px solid var(--accent-soft);
+    font-family: var(--serif);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    font-style: italic;
+    white-space: pre-wrap;
+  }
+
+  /* ─── MODAL ─── */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 22, 18, 0.6);
+    backdrop-filter: blur(2px);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 100;
+    padding: 40px 20px;
+    overflow-y: auto;
+  }
+
+  .modal-backdrop.active { display: flex; }
+
+  .modal {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 720px;
+    padding: 40px;
+    position: relative;
+  }
+
+  .modal-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .modal-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+  }
+
+  .form-grid.single { grid-template-columns: 1fr; }
+
+  .form-section-title {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    grid-column: 1 / -1;
+    border-bottom: 1px solid var(--paper-shadow);
+    padding-bottom: 4px;
+    margin-top: 16px;
+  }
+
+  .form-section-title:first-child { margin-top: 0; }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .form-field.full { grid-column: 1 / -1; }
+
+  .form-field label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 8px 10px;
+    border: 1px solid var(--rule);
+    background: var(--paper-warm);
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    outline: none;
+    border-color: var(--ink);
+    background: #fff;
+  }
+
+  .form-field textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .modal-footer-right {
+    display: flex;
+    gap: 12px;
+  }
+
+  /* ─── ADD ENTRY PROMPT ─── */
+  .add-entry-bar {
+    margin-top: 40px;
+    padding: 20px;
+    border: 1px dashed var(--rule);
+    text-align: center;
+  }
+
+  /* subtle printed ornament */
+  .ornament {
+    text-align: center;
+    margin: 48px 0 24px;
+    font-family: var(--serif);
+    color: var(--ink-faint);
+    letter-spacing: 0.5em;
+    font-size: 12px;
+  }
+
+  .export-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <span class="brand-kicker">No. 01 &mdash; Private Edition</span>
+      <h1 class="brand-title">The Bench <em>Book</em></h1>
+      <span class="brand-sub">A log of setups, tweaks, and second thoughts.</span>
+    </div>
+    <div class="meta">
+      <div id="currentDate">—</div>
+      <div><strong id="guitarCount">0</strong> instruments</div>
+      <div><strong id="entryCount">0</strong> total entries</div>
+    </div>
+  </header>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-heading">The Collection</div>
+      <ul class="guitar-list" id="guitarList"></ul>
+      <button class="btn btn-primary btn-full" onclick="openGuitarModal()">+ Add Guitar</button>
+      <div class="export-bar">
+        <button class="btn btn-ghost" onclick="exportData()" title="Download all data as JSON">Export</button>
+        <button class="btn btn-ghost" onclick="importData()" title="Restore from a JSON backup">Import</button>
+      </div>
+      <input type="file" id="importFile" accept="application/json" style="display:none" onchange="handleImport(event)">
+    </aside>
+
+    <!-- MAIN -->
+    <main id="main"></main>
+
+  </div>
+
+  <div class="ornament">◆ ◆ ◆</div>
+
+</div>
+
+<!-- GUITAR MODAL -->
+<div class="modal-backdrop" id="guitarModal">
+  <div class="modal">
+    <div class="modal-title" id="guitarModalTitle">Add Guitar</div>
+    <div class="modal-sub">Basic particulars — the kind of thing on the headstock or the case.</div>
+    <div class="form-grid">
+      <div class="form-field full">
+        <label>Name / Nickname</label>
+        <input type="text" id="guitarName" placeholder="e.g. Blue Silver Sky">
+      </div>
+      <div class="form-field">
+        <label>Make</label>
+        <input type="text" id="guitarMake" placeholder="PRS">
+      </div>
+      <div class="form-field">
+        <label>Model</label>
+        <input type="text" id="guitarModel" placeholder="Silver Sky SE (LH)">
+      </div>
+      <div class="form-field">
+        <label>Year</label>
+        <input type="text" id="guitarYear" placeholder="2024">
+      </div>
+      <div class="form-field">
+        <label>Serial #</label>
+        <input type="text" id="guitarSerial">
+      </div>
+      <div class="form-field">
+        <label>Scale Length</label>
+        <input type="text" id="guitarScale" placeholder='25.5"'>
+      </div>
+      <div class="form-field">
+        <label>Fretboard Radius</label>
+        <input type="text" id="guitarRadius" placeholder='8.5"'>
+      </div>
+      <div class="form-field">
+        <label>Bridge Type</label>
+        <select id="guitarBridge">
+          <option value="fixed">Fixed / Hardtail</option>
+          <option value="2-point">2-point Tremolo</option>
+          <option value="6-screw">6-screw Tremolo</option>
+          <option value="floyd">Floyd Rose / Locking</option>
+          <option value="bigsby">Bigsby</option>
+          <option value="tune-o-matic">Tune-o-matic</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-field full">
+        <label>Notes</label>
+        <textarea id="guitarNotes" placeholder="Anything worth remembering about this one..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div><!-- spacer --></div>
+      <div class="modal-footer-right">
+        <button class="btn" onclick="closeGuitarModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveGuitar()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ENTRY MODAL -->
+<div class="modal-backdrop" id="entryModal">
+  <div class="modal">
+    <div class="modal-title" id="entryModalTitle">New Entry</div>
+    <div class="modal-sub" id="entryModalSub">Log what's on the bench today.</div>
+
+    <div class="form-grid">
+      <div class="form-section-title">General</div>
+      <div class="form-field">
+        <label>Date</label>
+        <input type="date" id="entryDate">
+      </div>
+      <div class="form-field">
+        <label>Summary / Reason</label>
+        <input type="text" id="entrySummary" placeholder="Full setup, trem float, string change...">
+      </div>
+
+      <div class="form-section-title">Strings</div>
+      <div class="form-field">
+        <label>Gauge</label>
+        <input type="text" id="stringGauge" placeholder=".009 - .042">
+      </div>
+      <div class="form-field">
+        <label>Brand / Type</label>
+        <input type="text" id="stringBrand" placeholder="D'Addario XL">
+      </div>
+      <div class="form-field">
+        <label>Tuning</label>
+        <input type="text" id="tuning" placeholder="Standard E">
+      </div>
+      <div class="form-field">
+        <label>Strings Changed?</label>
+        <select id="stringsChanged">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+
+      <div class="form-section-title">Neck Relief (at 8th fret)</div>
+      <div class="form-field">
+        <label>Bass Side</label>
+        <input type="text" id="reliefBass" placeholder="0.30 mm">
+      </div>
+      <div class="form-field">
+        <label>Treble Side</label>
+        <input type="text" id="reliefTreble" placeholder="0.25 mm">
+      </div>
+
+      <div class="form-section-title">Action (12th fret, top of fret → bottom of string)</div>
+      <div class="form-field">
+        <label>Low E / Bass</label>
+        <input type="text" id="actionBass" placeholder="1.7 mm">
+      </div>
+      <div class="form-field">
+        <label>High E / Treble</label>
+        <input type="text" id="actionTreble" placeholder="1.4 mm">
+      </div>
+
+      <div class="form-section-title">Bridge / Tremolo</div>
+      <div class="form-field">
+        <label>Configuration</label>
+        <select id="tremConfig">
+          <option value="">— N/A —</option>
+          <option>Fully Decked</option>
+          <option>Floating Parallel</option>
+          <option>Floating Tilted Forward</option>
+          <option>Partial Float (back touching)</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Spring Count</label>
+        <input type="text" id="springCount" placeholder="2">
+      </div>
+      <div class="form-field">
+        <label>Front Gap</label>
+        <input type="text" id="tremFront" placeholder="1.0 mm">
+      </div>
+      <div class="form-field">
+        <label>Back Gap</label>
+        <input type="text" id="tremBack" placeholder="1.0 mm">
+      </div>
+
+      <div class="form-section-title">Pickups (height at last fret, string depressed)</div>
+      <div class="form-field">
+        <label>Neck</label>
+        <input type="text" id="pickupNeck" placeholder="—">
+      </div>
+      <div class="form-field">
+        <label>Middle</label>
+        <input type="text" id="pickupMiddle" placeholder="—">
+      </div>
+      <div class="form-field">
+        <label>Bridge</label>
+        <input type="text" id="pickupBridge" placeholder="—">
+      </div>
+      <div class="form-field">
+        <label>Intonation OK?</label>
+        <select id="intonationOk">
+          <option value="">—</option>
+          <option value="yes">Yes — set at 12th</option>
+          <option value="no">No — needs work</option>
+        </select>
+      </div>
+
+      <div class="form-section-title">Notes</div>
+      <div class="form-field full">
+        <label>Observations, changes, what felt off, what to try next</label>
+        <textarea id="entryNotes" placeholder="Nut slots lubricated with graphite. Plays great. Grub screws still a bit proud — order shorter M3s."></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div><!-- spacer --></div>
+      <div class="modal-footer-right">
+        <button class="btn" onclick="closeEntryModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveEntry()">Save Entry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────
+// DATA MODEL
+// ─────────────────────────────────────────────────────────
+let state = {
+  guitars: [],          // [{ id, name, make, model, year, serial, scale, radius, bridge, notes, entries: [] }]
+  activeGuitarId: null,
+  editingGuitarId: null,
+  editingEntryId: null
+};
+
+const STORAGE_KEY = 'bench-book-data';
+
+// ─────────────────────────────────────────────────────────
+// PERSISTENCE
+// ─────────────────────────────────────────────────────────
+async function saveState() {
+  try {
+    const toSave = { guitars: state.guitars, activeGuitarId: state.activeGuitarId };
+    await window.storage.set(STORAGE_KEY, JSON.stringify(toSave));
+  } catch (e) {
+    console.error('Save failed:', e);
+    alert('Save failed. Your changes may not persist.');
+  }
+}
+
+async function loadState() {
+  try {
+    const res = await window.storage.get(STORAGE_KEY);
+    if (res && res.value) {
+      const parsed = JSON.parse(res.value);
+      state.guitars = parsed.guitars || [];
+      state.activeGuitarId = parsed.activeGuitarId || null;
+    }
+  } catch (e) {
+    // No saved data yet — that's fine
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+// RENDERING
+// ─────────────────────────────────────────────────────────
+function render() {
+  renderMeta();
+  renderSidebar();
+  renderMain();
+}
+
+function renderMeta() {
+  document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
+  document.getElementById('guitarCount').textContent = state.guitars.length;
+  const total = state.guitars.reduce((s, g) => s + (g.entries?.length || 0), 0);
+  document.getElementById('entryCount').textContent = total;
+}
+
+function renderSidebar() {
+  const list = document.getElementById('guitarList');
+  if (state.guitars.length === 0) {
+    list.innerHTML = '<li style="padding: 10px 12px; color: var(--ink-faint); font-style: italic; font-size: 13px;">No guitars yet.</li>';
+    return;
+  }
+  list.innerHTML = state.guitars.map(g => `
+    <li class="guitar-item ${g.id === state.activeGuitarId ? 'active' : ''}" onclick="selectGuitar('${g.id}')">
+      <span class="guitar-item-name">${escape(g.name)}</span>
+      <span class="guitar-item-count">${g.entries?.length || 0}</span>
+    </li>
+  `).join('');
+}
+
+function renderMain() {
+  const main = document.getElementById('main');
+  const guitar = state.guitars.find(g => g.id === state.activeGuitarId);
+
+  if (!guitar) {
+    main.innerHTML = `
+      <div class="empty-state">
+        <h2>An empty bench.</h2>
+        <p>Add a guitar to start logging setups.</p>
+        <button class="btn btn-primary" onclick="openGuitarModal()">+ Add Your First Guitar</button>
+      </div>
+    `;
+    return;
+  }
+
+  const entries = (guitar.entries || []).slice().sort((a, b) => {
+    return new Date(b.date) - new Date(a.date);
+  });
+
+  main.innerHTML = `
+    <div class="guitar-header">
+      <div>
+        <h2 class="guitar-title">${escape(guitar.name)}</h2>
+        <div class="guitar-meta">
+          ${[guitar.year, guitar.make, guitar.model].filter(Boolean).map(escape).join(' · ')}
+          ${guitar.serial ? ' · SN ' + escape(guitar.serial) : ''}
+        </div>
+        <div class="guitar-meta">
+          ${[
+            guitar.scale ? 'Scale ' + escape(guitar.scale) : '',
+            guitar.radius ? 'Radius ' + escape(guitar.radius) : '',
+            guitar.bridge ? 'Bridge: ' + escape(bridgeLabel(guitar.bridge)) : ''
+          ].filter(Boolean).join(' · ')}
+        </div>
+        ${guitar.notes ? `<div class="entry-notes" style="margin-top:14px;">${escape(guitar.notes)}</div>` : ''}
+      </div>
+      <div class="guitar-actions">
+        <button class="btn btn-ghost" onclick="editGuitar('${guitar.id}')">Edit</button>
+        <button class="btn btn-ghost btn-danger" onclick="deleteGuitar('${guitar.id}')">Delete</button>
+      </div>
+    </div>
+
+    ${entries.length === 0 ? `
+      <div class="empty-state">
+        <h2>No entries yet.</h2>
+        <p>Every setup is one entry. Start fresh.</p>
+        <button class="btn btn-primary" onclick="openEntryModal()">+ First Entry</button>
+      </div>
+    ` : entries.map(e => renderEntry(e)).join('')}
+
+    ${entries.length > 0 ? `
+      <div class="add-entry-bar">
+        <button class="btn btn-primary" onclick="openEntryModal()">+ Add New Entry</button>
+      </div>
+    ` : ''}
+  `;
+}
+
+function renderEntry(e) {
+  const rows = (label, value) => value
+    ? `<div class="entry-row"><span class="entry-label">${label}</span><span class="entry-value">${escape(value)}</span></div>`
+    : '';
+
+  const dateFmt = e.date ? new Date(e.date + 'T00:00:00').toLocaleDateString('en-US', {
+    year: 'numeric', month: 'short', day: 'numeric'
+  }) : '—';
+
+  const stringSection = (e.stringGauge || e.stringBrand || e.tuning)
+    ? `<div class="entry-section">
+        <h4>Strings</h4>
+        ${rows('Gauge', e.stringGauge)}
+        ${rows('Brand', e.stringBrand)}
+        ${rows('Tuning', e.tuning)}
+        ${rows('Changed?', e.stringsChanged === 'yes' ? 'Yes' : '')}
+      </div>` : '';
+
+  const reliefSection = (e.reliefBass || e.reliefTreble)
+    ? `<div class="entry-section">
+        <h4>Neck Relief</h4>
+        ${rows('Bass side', e.reliefBass)}
+        ${rows('Treble side', e.reliefTreble)}
+      </div>` : '';
+
+  const actionSection = (e.actionBass || e.actionTreble)
+    ? `<div class="entry-section">
+        <h4>Action @ 12th</h4>
+        ${rows('Low E', e.actionBass)}
+        ${rows('High E', e.actionTreble)}
+      </div>` : '';
+
+  const tremSection = (e.tremConfig || e.springCount || e.tremFront || e.tremBack)
+    ? `<div class="entry-section">
+        <h4>Bridge / Tremolo</h4>
+        ${rows('Config', e.tremConfig)}
+        ${rows('Springs', e.springCount)}
+        ${rows('Front gap', e.tremFront)}
+        ${rows('Back gap', e.tremBack)}
+      </div>` : '';
+
+  const pickupSection = (e.pickupNeck || e.pickupMiddle || e.pickupBridge || e.intonationOk)
+    ? `<div class="entry-section">
+        <h4>Pickups & Intonation</h4>
+        ${rows('Neck', e.pickupNeck)}
+        ${rows('Middle', e.pickupMiddle)}
+        ${rows('Bridge', e.pickupBridge)}
+        ${rows('Intonation', e.intonationOk === 'yes' ? 'Set' : e.intonationOk === 'no' ? 'Needs work' : '')}
+      </div>` : '';
+
+  return `
+    <article class="entry">
+      <div class="entry-head">
+        <span class="entry-date">${dateFmt}</span>
+        <span class="entry-summary">${escape(e.summary || '')}</span>
+        <button class="entry-delete" onclick="deleteEntry('${e.id}')">✕ DELETE</button>
+      </div>
+      <div class="entry-grid">
+        ${stringSection}
+        ${reliefSection}
+        ${actionSection}
+        ${tremSection}
+        ${pickupSection}
+      </div>
+      ${e.notes ? `<div class="entry-notes">${escape(e.notes)}</div>` : ''}
+    </article>
+  `;
+}
+
+function bridgeLabel(v) {
+  const m = {
+    'fixed': 'Fixed / Hardtail',
+    '2-point': '2-point Tremolo',
+    '6-screw': '6-screw Tremolo',
+    'floyd': 'Floyd Rose / Locking',
+    'bigsby': 'Bigsby',
+    'tune-o-matic': 'Tune-o-matic',
+    'other': 'Other'
+  };
+  return m[v] || v;
+}
+
+function escape(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+// ─────────────────────────────────────────────────────────
+// GUITAR CRUD
+// ─────────────────────────────────────────────────────────
+function openGuitarModal(id = null) {
+  state.editingGuitarId = id;
+  const title = document.getElementById('guitarModalTitle');
+  const g = id ? state.guitars.find(x => x.id === id) : null;
+  title.textContent = g ? 'Edit Guitar' : 'Add Guitar';
+
+  document.getElementById('guitarName').value = g?.name || '';
+  document.getElementById('guitarMake').value = g?.make || '';
+  document.getElementById('guitarModel').value = g?.model || '';
+  document.getElementById('guitarYear').value = g?.year || '';
+  document.getElementById('guitarSerial').value = g?.serial || '';
+  document.getElementById('guitarScale').value = g?.scale || '';
+  document.getElementById('guitarRadius').value = g?.radius || '';
+  document.getElementById('guitarBridge').value = g?.bridge || 'fixed';
+  document.getElementById('guitarNotes').value = g?.notes || '';
+
+  document.getElementById('guitarModal').classList.add('active');
+  setTimeout(() => document.getElementById('guitarName').focus(), 50);
+}
+
+function closeGuitarModal() {
+  document.getElementById('guitarModal').classList.remove('active');
+  state.editingGuitarId = null;
+}
+
+async function saveGuitar() {
+  const name = document.getElementById('guitarName').value.trim();
+  if (!name) { alert('Name is required.'); return; }
+
+  const data = {
+    name,
+    make: document.getElementById('guitarMake').value.trim(),
+    model: document.getElementById('guitarModel').value.trim(),
+    year: document.getElementById('guitarYear').value.trim(),
+    serial: document.getElementById('guitarSerial').value.trim(),
+    scale: document.getElementById('guitarScale').value.trim(),
+    radius: document.getElementById('guitarRadius').value.trim(),
+    bridge: document.getElementById('guitarBridge').value,
+    notes: document.getElementById('guitarNotes').value.trim()
+  };
+
+  if (state.editingGuitarId) {
+    const g = state.guitars.find(x => x.id === state.editingGuitarId);
+    Object.assign(g, data);
+  } else {
+    state.guitars.push({
+      id: 'g_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      ...data,
+      entries: []
+    });
+    state.activeGuitarId = state.guitars[state.guitars.length - 1].id;
+  }
+
+  closeGuitarModal();
+  await saveState();
+  render();
+}
+
+function editGuitar(id) { openGuitarModal(id); }
+
+async function deleteGuitar(id) {
+  const g = state.guitars.find(x => x.id === id);
+  if (!g) return;
+  if (!confirm(`Delete "${g.name}" and all its entries? This can't be undone.`)) return;
+  state.guitars = state.guitars.filter(x => x.id !== id);
+  if (state.activeGuitarId === id) state.activeGuitarId = state.guitars[0]?.id || null;
+  await saveState();
+  render();
+}
+
+function selectGuitar(id) {
+  state.activeGuitarId = id;
+  saveState();
+  render();
+}
+
+// ─────────────────────────────────────────────────────────
+// ENTRY CRUD
+// ─────────────────────────────────────────────────────────
+function openEntryModal(entryId = null) {
+  state.editingEntryId = entryId;
+  const guitar = state.guitars.find(g => g.id === state.activeGuitarId);
+  if (!guitar) return;
+
+  document.getElementById('entryModalTitle').textContent = entryId ? 'Edit Entry' : 'New Entry';
+  document.getElementById('entryModalSub').textContent = `For ${guitar.name}.`;
+
+  const e = entryId ? (guitar.entries || []).find(x => x.id === entryId) : null;
+  const today = new Date().toISOString().split('T')[0];
+
+  document.getElementById('entryDate').value = e?.date || today;
+  document.getElementById('entrySummary').value = e?.summary || '';
+  document.getElementById('stringGauge').value = e?.stringGauge || '';
+  document.getElementById('stringBrand').value = e?.stringBrand || '';
+  document.getElementById('tuning').value = e?.tuning || '';
+  document.getElementById('stringsChanged').value = e?.stringsChanged || 'no';
+  document.getElementById('reliefBass').value = e?.reliefBass || '';
+  document.getElementById('reliefTreble').value = e?.reliefTreble || '';
+  document.getElementById('actionBass').value = e?.actionBass || '';
+  document.getElementById('actionTreble').value = e?.actionTreble || '';
+  document.getElementById('tremConfig').value = e?.tremConfig || '';
+  document.getElementById('springCount').value = e?.springCount || '';
+  document.getElementById('tremFront').value = e?.tremFront || '';
+  document.getElementById('tremBack').value = e?.tremBack || '';
+  document.getElementById('pickupNeck').value = e?.pickupNeck || '';
+  document.getElementById('pickupMiddle').value = e?.pickupMiddle || '';
+  document.getElementById('pickupBridge').value = e?.pickupBridge || '';
+  document.getElementById('intonationOk').value = e?.intonationOk || '';
+  document.getElementById('entryNotes').value = e?.notes || '';
+
+  document.getElementById('entryModal').classList.add('active');
+  setTimeout(() => document.getElementById('entrySummary').focus(), 50);
+}
+
+function closeEntryModal() {
+  document.getElementById('entryModal').classList.remove('active');
+  state.editingEntryId = null;
+}
+
+async function saveEntry() {
+  const guitar = state.guitars.find(g => g.id === state.activeGuitarId);
+  if (!guitar) return;
+
+  const data = {
+    date: document.getElementById('entryDate').value,
+    summary: document.getElementById('entrySummary').value.trim(),
+    stringGauge: document.getElementById('stringGauge').value.trim(),
+    stringBrand: document.getElementById('stringBrand').value.trim(),
+    tuning: document.getElementById('tuning').value.trim(),
+    stringsChanged: document.getElementById('stringsChanged').value,
+    reliefBass: document.getElementById('reliefBass').value.trim(),
+    reliefTreble: document.getElementById('reliefTreble').value.trim(),
+    actionBass: document.getElementById('actionBass').value.trim(),
+    actionTreble: document.getElementById('actionTreble').value.trim(),
+    tremConfig: document.getElementById('tremConfig').value,
+    springCount: document.getElementById('springCount').value.trim(),
+    tremFront: document.getElementById('tremFront').value.trim(),
+    tremBack: document.getElementById('tremBack').value.trim(),
+    pickupNeck: document.getElementById('pickupNeck').value.trim(),
+    pickupMiddle: document.getElementById('pickupMiddle').value.trim(),
+    pickupBridge: document.getElementById('pickupBridge').value.trim(),
+    intonationOk: document.getElementById('intonationOk').value,
+    notes: document.getElementById('entryNotes').value.trim()
+  };
+
+  if (!data.date) { alert('Date is required.'); return; }
+
+  if (!guitar.entries) guitar.entries = [];
+
+  if (state.editingEntryId) {
+    const e = guitar.entries.find(x => x.id === state.editingEntryId);
+    Object.assign(e, data);
+  } else {
+    guitar.entries.push({
+      id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      ...data
+    });
+  }
+
+  closeEntryModal();
+  await saveState();
+  render();
+}
+
+async function deleteEntry(id) {
+  const guitar = state.guitars.find(g => g.id === state.activeGuitarId);
+  if (!guitar) return;
+  if (!confirm('Delete this entry?')) return;
+  guitar.entries = (guitar.entries || []).filter(x => x.id !== id);
+  await saveState();
+  render();
+}
+
+// ─────────────────────────────────────────────────────────
+// EXPORT / IMPORT
+// ─────────────────────────────────────────────────────────
+function exportData() {
+  const data = { guitars: state.guitars, exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `bench-book-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData() {
+  document.getElementById('importFile').click();
+}
+
+async function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!Array.isArray(data.guitars)) { alert('This doesn\'t look like a Bench Book file.'); return; }
+    if (!confirm('Replace current data with imported data? (Recommend exporting first as a backup.)')) return;
+    state.guitars = data.guitars;
+    state.activeGuitarId = data.guitars[0]?.id || null;
+    await saveState();
+    render();
+  } catch (e) {
+    alert('Import failed: ' + e.message);
+  }
+  event.target.value = '';
+}
+
+// ─────────────────────────────────────────────────────────
+// SEED DATA — the Silver Sky setup we just did
+// ─────────────────────────────────────────────────────────
+async function seedIfEmpty() {
+  if (state.guitars.length > 0) return;
+
+  const silverSky = {
+    id: 'g_seed_silversky',
+    name: 'Blue Silver Sky',
+    make: 'PRS',
+    model: 'Silver Sky SE (Left-Handed)',
+    year: '',
+    serial: '',
+    scale: '25.5"',
+    radius: '8.5"',
+    bridge: '2-point',
+    notes: 'Floated setup — opposite of factory-decked. Mayer spec is normally back-edge-flush; this one is now parallel float ~1mm both sides. 9s installed by shop, 2 springs in outer claw holes.',
+    entries: [{
+      id: 'e_seed_silversky_1',
+      date: new Date().toISOString().split('T')[0],
+      summary: 'Full setup — flush-mount to floating trem',
+      stringGauge: '.009 - .042',
+      stringBrand: '',
+      tuning: 'Standard E',
+      stringsChanged: 'no',
+      reliefBass: '0.35 mm',
+      reliefTreble: '0.30 mm',
+      actionBass: '1.7 mm',
+      actionTreble: '1.4 mm',
+      tremConfig: 'Floating Parallel',
+      springCount: '2',
+      tremFront: '1.0 mm',
+      tremBack: '1.0 mm',
+      pickupNeck: '',
+      pickupMiddle: '',
+      pickupBridge: '',
+      intonationOk: 'yes',
+      notes: 'Removed 2 springs (was 4) going from 10s-decked to 9s-floating. Backed off claw screws 3 turns initial, then dialed in 1/4 turn at a time under tension. Nut slots lubed with graphite (bottled + toothpick application) — cured bass-side sharp drift on trem return. Saddles raised from 1.4/1.1 up to 1.7/1.4 to eliminate mid-neck buzz and bend choke. Intonation set at 12th fret, all strings in tune. OUTSTANDING: grub screws protrude above saddles, hand contact issue — plan to source shorter M3 screws. Formal nut height check still to do.'
+    }]
+  };
+
+  state.guitars.push(silverSky);
+  state.activeGuitarId = silverSky.id;
+  await saveState();
+}
+
+// ─────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────
+(async function init() {
+  await loadState();
+  await seedIfEmpty();
+  render();
+})();
+
+// Close modals on backdrop click
+document.getElementById('guitarModal').addEventListener('click', (e) => {
+  if (e.target.id === 'guitarModal') closeGuitarModal();
+});
+document.getElementById('entryModal').addEventListener('click', (e) => {
+  if (e.target.id === 'entryModal') closeEntryModal();
+});
+// Close modals on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeGuitarModal();
+    closeEntryModal();
+  }
+});
+</script>
+</body>
+</html>
