@@ -808,18 +808,18 @@ const STORAGE_KEY = 'bench-book-data';
 async function saveState() {
   try {
     const toSave = { guitars: state.guitars, activeGuitarId: state.activeGuitarId };
-    await window.storage.set(STORAGE_KEY, JSON.stringify(toSave));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
   } catch (e) {
     console.error('Save failed:', e);
-    alert('Save failed. Your changes may not persist.');
+    alert('Save failed. Your changes may not persist. (Check that browser storage is enabled.)');
   }
 }
 
 async function loadState() {
   try {
-    const res = await window.storage.get(STORAGE_KEY);
-    if (res && res.value) {
-      const parsed = JSON.parse(res.value);
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
       state.guitars = parsed.guitars || [];
       state.activeGuitarId = parsed.activeGuitarId || null;
     }
